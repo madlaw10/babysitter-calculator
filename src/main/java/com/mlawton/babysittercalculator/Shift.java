@@ -21,6 +21,13 @@ public class Shift {
         return getDuration(this.startTime, this.endTime);
     }
 
+    public long getLateShiftDuration () {
+        if (this.endTime.compareTo(LocalTime.MIDNIGHT) <= 0) {
+            return 0;
+        }
+        return getDuration(LocalTime.MIDNIGHT, this.endTime);
+    }
+
     private long getDuration (LocalTime shiftStart, LocalTime shiftEnd) {
         long duration = shiftStart.until(shiftEnd, ChronoUnit.HOURS);
         if (duration > 0) {
