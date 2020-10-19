@@ -30,6 +30,8 @@ public class BabysitterCalculatorApplication {
 		System.out.println("Sleep Time (" + shift.getSleepShiftDuration() + " hours at $8/hr): $" + sleepTimeCharge);
 		System.out.println("After Midnight (" + shift.getLateShiftDuration() +" hours at 16/hr): $" + afterMidnightCharge);
 		System.out.println("Total Charge: $" + totalCharge);
+
+		input.close();
 	}
 
 }
