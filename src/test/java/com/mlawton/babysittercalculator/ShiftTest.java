@@ -20,8 +20,15 @@ public class ShiftTest {
     }
 
     @Test
-    public void getTotalShiftDuration_WhenShiftStartsAtFiveAndEndsAtSixThirty_ReturnsTwoHours() {
-        Shift testShift = new Shift("5:00 PM", "6:30 PM", "6:30 PM");
+    public void getTotalShiftDuration_WhenShiftStartsAtFiveAndEndsAtSixTewnty_ReturnsTwoHours() {
+        Shift testShift = new Shift("5:00 PM", "6:20 PM", "6:20 PM");
+        long testShiftDuration = testShift.getTotalShiftDuration();
+        Assert.assertEquals(2, testShiftDuration);
+    }
+
+    @Test
+    public void getTotalShiftDuration_WhenShiftStartsAtFiveTwentyAndEndsAtSeven_ReturnsTwoHours() {
+        Shift testShift = new Shift("5:20 PM", "7:00 PM", "7:00 PM");
         long testShiftDuration = testShift.getTotalShiftDuration();
         Assert.assertEquals(2, testShiftDuration);
     }
@@ -66,6 +73,34 @@ public class ShiftTest {
         Shift testShift = new Shift("10:00 PM", "10:00 PM", "1:00 AM");
         long testSleepShiftDuration = testShift.getSleepShiftDuration();
         Assert.assertEquals(2, testSleepShiftDuration);
+    }
+
+    @Test
+    public void getDayShiftDuration_WhenStartTimeIsFiveAndBedTimeIsEight_ReturnsThreeHours() {
+        Shift testShift = new Shift("5:00 PM", "8:00 PM", "1:00 AM");
+        long testDayShiftDuration = testShift.getDayShiftDuration();
+        Assert.assertEquals(3, testDayShiftDuration);
+    }
+
+    @Test
+    public void getDayShiftDuration_WhenStartTimeIsFiveAndEndTimeIsOneAndNoBedTime_ReturnsSevenHours() {
+        Shift testShift = new Shift("5:00 PM", "1:00 AM", "1:00 AM");
+        long testDayShiftDuration = testShift.getDayShiftDuration();
+        Assert.assertEquals(7, testDayShiftDuration);
+    }
+
+    @Test
+    public void getDayShiftDuration_WhenStartTimeIsFiveAndEndTimeIsEightAndNoBedTime_ReturnsThreeHours() {
+        Shift testShift = new Shift("5:00 PM", "8:00 PM", "8:00 PM");
+        long testDayShiftDuration = testShift.getDayShiftDuration();
+        Assert.assertEquals(3, testDayShiftDuration);
+    }
+
+    @Test
+    public void getDayShiftDuration_WhenStartTimeIsTenAndBedTimeTen_ReturnsZeroHours() {
+        Shift testShift = new Shift("10:00 PM", "10:00 PM", "11:00 PM");
+        long testDayShiftDuration = testShift.getDayShiftDuration();
+        Assert.assertEquals(0, testDayShiftDuration);
     }
 
 }

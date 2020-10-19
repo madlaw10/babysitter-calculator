@@ -14,17 +14,22 @@ public class BabysitterCalculatorApplication {
 		System.out.println("Enter the time you left below (ex 4:00 AM)");
 		String endTimeInput = input.nextLine();
 		System.out.println("If applicable, enter the bedtime below (ex 11:00 PM). If child did not go to bed, enter N/A");
-		String bedtimeInput = input.nextLine();
-		if("N/A".equals(bedtimeInput)) {
-			String adjustedBedTime = endTimeInput;
+		String bedTimeInput = input.nextLine();
+		if("N/A".equals(bedTimeInput)) {
+			bedTimeInput = endTimeInput;
 		}
-		System.out.println("Start Time: " + startTimeInput + ", End Time: " + endTimeInput + ", Bedtime: " + bedtimeInput);
 
-//				System.out.println("Invoice for MM/DD/YYYY START-END");
-//				System.out.println("Playtime (__ hours at $12/hr):      $__");
-//				System.out.println("Bedtime (__ hours at $8/hr):        $__");
-//				System.out.println("After Midnight (__ hours at 16/hr): $__");
-//				System.out.println("Total Charge:                       $__");
+		Shift shift = new Shift(startTimeInput, bedTimeInput, endTimeInput);
+
+		double playTimeCharge = shift.getDayShiftDuration() * 12.00;
+		double sleepTimeCharge = shift.getSleepShiftDuration() * 8.00;
+		double afterMidnightCharge = shift.getLateShiftDuration() * 16.00;
+		double totalCharge = playTimeCharge + sleepTimeCharge + afterMidnightCharge;
+
+		System.out.println("Play Time (" + shift.getDayShiftDuration() + " hours at $12/hr): $" + playTimeCharge);
+		System.out.println("Sleep Time (" + shift.getSleepShiftDuration() + " hours at $8/hr): $" + sleepTimeCharge);
+		System.out.println("After Midnight (" + shift.getLateShiftDuration() +" hours at 16/hr): $" + afterMidnightCharge);
+		System.out.println("Total Charge: $" + totalCharge);
 	}
 
 }

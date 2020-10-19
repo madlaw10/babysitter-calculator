@@ -12,7 +12,7 @@ public class Shift {
     final private LocalTime endTime;
 
     public Shift(String startTime, String bedTime, String endTime) {
-        this.startTime = formatAndRoundUpTime(startTime);
+        this.startTime = formatAndRoundDownTime(startTime);
         this.bedTime = formatAndRoundUpTime(bedTime);
         this.endTime = formatAndRoundUpTime(endTime);
     }
@@ -22,27 +22,32 @@ public class Shift {
     }
 
     public long getLateShiftDuration () {
-        if (this.endTime.compareTo(LocalTime.MIDNIGHT) == 0 ||
-            this.endTime.compareTo(LocalTime.NOON) > 0) {
+        if (endTimeIsEarlierThanMidnight()) {
             return 0;
         }
         return getDuration(LocalTime.MIDNIGHT, this.endTime);
     }
 
     public long getSleepShiftDuration () {
-        if (this.bedTime.compareTo(LocalTime.MIDNIGHT) == 0 ||
-            this.bedTime.compareTo(this.endTime) == 0) {
-            return 0;
-        }
-        if (this.endTime.compareTo(LocalTime.NOON) < 0) {
+        if (!bedTimeIsLaterThanMidnight() && !endTimeIsEarlierThanMidnight()) {
             return getDuration(this.bedTime, LocalTime.MIDNIGHT);
         }
         return getDuration(this.bedTime, this.endTime);
     }
 
+    public long getDayShiftDuration () {
+        if (bedTimeIsLaterThanMidnight() && !endTimeIsEarlierThanMidnight()) {
+            return getDuration(this.startTime, LocalTime.MIDNIGHT);
+        }
+        if (this.startTime.compareTo(this.bedTime) == 0) {
+            return 0;
+        }
+        return getDuration(this.startTime, this.bedTime);
+    }
+
     private long getDuration (LocalTime shiftStart, LocalTime shiftEnd) {
         long duration = shiftStart.until(shiftEnd, ChronoUnit.HOURS);
-        if (duration > 0) {
+        if (duration >= 0) {
             return duration;
         }
 
@@ -54,8 +59,7 @@ public class Shift {
     }
 
     private LocalTime formatAndRoundUpTime(String time) {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("h:mm a");
-        LocalTime formattedTime = LocalTime.parse(time, format);
+        LocalTime formattedTime = formatTime(time);
 
         if (formattedTime.getMinute() == 0) {
             return formattedTime;
@@ -64,4 +68,26 @@ public class Shift {
         return formattedTime.plusMinutes(60 - formattedTime.getMinute());
     }
 
+    private LocalTime formatAndRoundDownTime(String time) {
+        LocalTime formattedTime = formatTime(time);
+
+        if (formattedTime.getMinute() == 0) {
+            return formattedTime;
+        }
+
+        return formattedTime.minusMinutes(formattedTime.getMinute());
+    }
+
+    private LocalTime formatTime(String time) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("h:mm a");
+        return LocalTime.parse(time, format);
+    }
+
+    private boolean bedTimeIsLaterThanMidnight() {
+        return this.bedTime.compareTo(LocalTime.NOON) < 0;
+    }
+
+    private boolean endTimeIsEarlierThanMidnight() {
+        return this.endTime.compareTo(LocalTime.NOON) > 0;
+    }
 }
