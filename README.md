@@ -1,4 +1,4 @@
-##Babysitter Invoice Calculator
+# Babysitter Invoice Calculator
 
 Console application to create an invoice for a single babysitting job. 
 Babysitter supplies the times shift started and ended, and time child 
