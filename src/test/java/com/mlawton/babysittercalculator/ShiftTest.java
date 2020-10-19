@@ -6,45 +6,66 @@ import org.junit.Test;
 public class ShiftTest {
 
     @Test
-    public void shouldComputeTotalShiftHoursAsOneHourIfShiftStartsAtFiveAndEndsAtSix() {
+    public void getTotalShiftDuration_WhenShiftStartsAtFiveAndEndsAtSix_ReturnsOneHour() {
         Shift testShift = new Shift("5:00 PM", "6:00 PM", "6:00 PM");
         long testShiftDuration = testShift.getTotalShiftDuration();
         Assert.assertEquals(1, testShiftDuration);
     }
 
     @Test
-    public void shouldComputeTotalShiftHoursAsOneHourIfShiftStartsAtElevenAndEndsAtMidnight() {
+    public void getTotalShiftDuration_WhenShiftStartsAtElevenAndEndsAtMidnight_ReturnsOneHour() {
         Shift testShift = new Shift("11:00 PM", "12:00 AM", "12:00 AM");
         long testShiftDuration = testShift.getTotalShiftDuration();
         Assert.assertEquals(1, testShiftDuration);
     }
 
     @Test
-    public void shouldComputeTotalShiftHoursAsTwoHoursIfShiftStartsAtFiveAndEndsAtSixThirty() {
+    public void getTotalShiftDuration_WhenShiftStartsAtFiveAndEndsAtSixThirty_ReturnsTwoHours() {
         Shift testShift = new Shift("5:00 PM", "6:30 PM", "6:30 PM");
         long testShiftDuration = testShift.getTotalShiftDuration();
         Assert.assertEquals(2, testShiftDuration);
     }
 
     @Test
-    public void shouldComputeLateShiftHoursAsOneHourIfShiftStartsAtMidnightAndEndsAtOne() {
+    public void getLateShiftDuration_WhenShiftStartsAtMidnightAndEndsAtOne_ReturnsOneHour() {
         Shift testShift = new Shift("12:00 AM", "1:00 AM", "1:00 AM");
         long testLateShiftDuration = testShift.getLateShiftDuration();
         Assert.assertEquals(1, testLateShiftDuration);
     }
 
     @Test
-    public void shouldComputeLateShiftHoursAsOneHourIfShiftStartsAtElevenAndEndsAtOne() {
+    public void getLateShiftDuration_ShiftStartsAtElevenAndEndsAtOne_ReturnsOneHour() {
         Shift testShift = new Shift("11:00 PM", "1:00 AM", "1:00 AM");
         long testLateShiftDuration = testShift.getLateShiftDuration();
         Assert.assertEquals(1, testLateShiftDuration);
     }
 
     @Test
-    public void shouldComputeLateShiftHoursAsZeroHourIfShiftStartsAtElevenAndEndsAtMidnight() {
-        Shift testShift = new Shift("11:00 PM", "12:00 AM", "12:00 AM");
+    public void getLateShiftDuration_ShiftStartsAtTenAndEndsAtEleven_ReturnsZeroHours() {
+        Shift testShift = new Shift("10:00 PM", "11:00 PM", "11:00 PM");
         long testLateShiftDuration = testShift.getLateShiftDuration();
         Assert.assertEquals(0, testLateShiftDuration);
+    }
+
+    @Test
+    public void getSleepShiftDuration_WhenBedTimeIsTenAndEndTimeIsEleven_ReturnsOneHour() {
+        Shift testShift = new Shift("10:00 PM", "10:00 PM", "11:00 PM");
+        long testSleepShiftDuration = testShift.getSleepShiftDuration();
+        Assert.assertEquals(1, testSleepShiftDuration);
+    }
+
+    @Test
+    public void getSleepShiftDuration_WhenBedTimeIsElevenAndEndTimeIsEleven_ReturnsZeroHours() {
+        Shift testShift = new Shift("10:00 PM", "11:00 PM", "11:00 PM");
+        long testSleepShiftDuration = testShift.getSleepShiftDuration();
+        Assert.assertEquals(0, testSleepShiftDuration);
+    }
+
+    @Test
+    public void getSleepShiftDuration_WhenBedTimeIsTenAndEndTimeIsOne_ReturnsTwoHours() {
+        Shift testShift = new Shift("10:00 PM", "10:00 PM", "1:00 AM");
+        long testSleepShiftDuration = testShift.getSleepShiftDuration();
+        Assert.assertEquals(2, testSleepShiftDuration);
     }
 
 }

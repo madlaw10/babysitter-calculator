@@ -22,10 +22,22 @@ public class Shift {
     }
 
     public long getLateShiftDuration () {
-        if (this.endTime.compareTo(LocalTime.MIDNIGHT) <= 0) {
+        if (this.endTime.compareTo(LocalTime.MIDNIGHT) == 0 ||
+            this.endTime.compareTo(LocalTime.NOON) > 0) {
             return 0;
         }
         return getDuration(LocalTime.MIDNIGHT, this.endTime);
+    }
+
+    public long getSleepShiftDuration () {
+        if (this.bedTime.compareTo(LocalTime.MIDNIGHT) == 0 ||
+            this.bedTime.compareTo(this.endTime) == 0) {
+            return 0;
+        }
+        if (this.endTime.compareTo(LocalTime.NOON) < 0) {
+            return getDuration(this.bedTime, LocalTime.MIDNIGHT);
+        }
+        return getDuration(this.bedTime, this.endTime);
     }
 
     private long getDuration (LocalTime shiftStart, LocalTime shiftEnd) {
