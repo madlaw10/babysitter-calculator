@@ -1,20 +1,17 @@
 plugins {
 	id 'java'
+	id 'application'
 }
 
 group = 'com.mlawton'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0-RELEASE'
 sourceCompatibility = '11'
 
 repositories {
-	mavenCentral()
+	jcenter()
 }
 
 dependencies {
-	compile 'com.google.guava:guava:23.0'
-	testCompile 'junit:junit:4.12'
-}
-
-test {
-	useJUnitPlatform()
+	implementation 'com.google.guava:guava:28.0-jre'
+	testImplementation 'junit:junit:4.12'
 }
